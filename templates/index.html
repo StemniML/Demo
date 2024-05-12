@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Web App</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Machine Learning Web App</h1>
+        <form id="inputForm" action="/" method="post" onsubmit="return checkInputs();">
+            {% for i in range(20) %}
+            <div class="input-row">
+                <div class="col">
+                    <label for="feature_{{ i+1 }}">Feature {{ i+1 }}:</label>
+                    <div class="input-group">
+                        <input type="number" name="feature_{{ i+1 }}" id="feature_{{ i+1 }}" step="0.01" value="0">
+                        <select name="toggle_feature_{{ i+1 }}" id="toggle_feature_{{ i+1 }}">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="button-row">
+                <button type="submit">Submit</button>
+                <button type="button" onclick="loadData()">Load Data</button>
+                <button type="button" onclick="clearInputs()">Clear Inputs</button>
+            </div>
+        </form>
+        {% if missing_data %}
+            <p style="color: red;">Please enter values for all features!</p>
+        {% endif %}
+        {% if user_proba is defined %}
+            <p>Probability of class 1 for the user input data: {{ user_proba }}</p>
+            <p>User Input: {% if user_prediction == "Positive" %} Positive {% else %} Negative {% endif %}</p>
+            <p>AUC Score RandomForest (Test): {{ auc_score_test_rf }}</p>
+            <p>AUC Score SVM (Test): {{ auc_score_test_svm }}</p>
+            <p>AUC Score Logistic Regression (Test): {{ auc_score_test_lr }}</p>
+            <img src="{{ plt_path }}" alt="">
+        {% endif %}
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
